@@ -11,7 +11,8 @@ class FormController
 
         // ...
 
-        return new TemplateView('view_name', [
+        return new TemplateView(
+            'view_name', [
             'title' => 'My awesome page',
             'forms' => [],// ...
         ]);
