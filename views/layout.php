@@ -4,14 +4,14 @@
 </head>
 <body>
 
-<h1>Header</h1>
+<h5>Header</h5>
 
 
 <?= $content ?>
 
 
 <br />
-<h2>Footer</h2>
+<h5>Footer</h5>
 
 </body>
 </html>

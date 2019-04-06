@@ -2,28 +2,31 @@
 
 namespace App\Views;
 
-class TemplateView
+class TemplateView implements ViewInterface
 {
-    /**
-     * TemplateView constructor.
-     */
-    public function __construct($view_name, $forms)
+    protected $template;
+
+    protected $data = [];
+
+    public function __construct(string $template, array $data = [])
     {
-        $path = __DIR__ . '/../../views/' . $view_name . '.php';
+        $this->template = $template;
+        $this->data = $data;
+    }
+
+    public function render()
+    {
+        extract($this->data);
+
+        $path = __DIR__ . '/../../views/' . $this->template . '.php';
+        if (!file_exists($path)) {
+            throw new \Exception('View file does not exists');
+        }
 
         ob_start();
+        require __DIR__ . '/../../views/' . $this->template . '.php';
+        $content = ob_get_clean();
 
-        $view = include_once $path;
-        $content = ob_get_contents();
-
-        ob_clean();
-
-        $layout = include_once __DIR__ . '/../../views/layout.php';
-        $content = ob_get_contents();
-
-        ob_end_clean();
-
-        echo $content;
-
+        require __DIR__ . '/../../views/layout.php';
     }
 }

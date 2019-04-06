@@ -18,4 +18,9 @@ class Request implements RequestInterface
     {
         return $_GET;
     }
+
+    public function getPostData()
+    {
+        return $_POST;
+    }
 }
