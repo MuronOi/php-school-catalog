@@ -25,8 +25,10 @@ class Application
 
         $controller = $this->resolveControllerClass($route);
         $action = $this->resolveControllerAction($route, $controller);
+        p($action);
 
         $result = $this->runControllerAction($controller, $action, $request);
+        p($result);
         $this->render($result);
     }
 
@@ -48,15 +50,16 @@ class Application
         if (!method_exists($controller, $action)) {
             throw new \Exception('Action does not exists');
         }
-
+        p('action - ', $action);
         return $action;
     }
 
     protected function runControllerAction($controller, $action, RequestInterface $request)
     {
         $params = $request->getQueryParams();
+        p($params);
         $postData = $request->getPostData();
-
+        p($postData);
         return $controller->$action($params, $postData);
     }
 
@@ -67,7 +70,7 @@ class Application
         } elseif (is_string($result)) {
             echo $result;
         } else {
-            throw new \Exception('Unsuported type');
+            throw new \Exception('Unsupported type');
         }
     }
 }

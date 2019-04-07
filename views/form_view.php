@@ -4,6 +4,7 @@
     <p><?= $form['content'] ?></p>
     <p><i>Created at: <?= $form['created_at'] ?></i></p>
 
+    <p><a href="/forms/update?id=<?= $form['id'] ?> &title=<?= $form['title'] ?>&content=<?= $form['content'] ?> ">Update this form</a></p>
     <p><a href="/forms/delete?id=<?= $form['id'] ?>">Delete this form</a></p>
     <p><a href="/forms">Return to forms list</a></p>
 
