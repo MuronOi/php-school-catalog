@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Database\Query;
 use App\Views\RedirectView;
+use App\Views\StringView;
 use App\Views\TemplateView;
 use http\Params;
 
@@ -60,8 +61,12 @@ class FormController
 
     public function update ($params)
     {
-        p($params);
-        $form = $params;
         return new TemplateView( 'form_update', ['form' => $params]);
+    }
+
+    public function updatePost($get, $params)
+    {
+        (new Query)->execute("UPDATE forms SET title = :title, content = :content WHERE id = :id", $params['form']);
+        return new RedirectView('/forms/view?id=' . $params['form']['id']);
     }
 }

@@ -1,7 +1,8 @@
 
-<h1>Update Form <?= $form['id'] ?></h1>
+<h1>Update Form '<?= $form['title'] ?>'</h1>
 
 <form action="/forms/update" method="POST">
+    <input type="hidden" name="form[id]" value=<?= $form['id'] ?> />
     Title:
     <input type="text" name="form[title]" value=<?= $form['title'] ?> />
     <br>
