@@ -3,6 +3,7 @@
 namespace App\Database;
 
 use App\Config;
+use App\logger\Logger;
 use PDO;
 
 class Query
@@ -24,16 +25,27 @@ class Query
 
     public function getRow(string $query, array $params = [])
     {
-        $query = $this->db->prepare($query);
-        $query->execute($params);
-        return $query->fetch(PDO::FETCH_ASSOC);
+        try{
+            $query = $this->db->prepare($query);
+            $query->execute($params);
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } catch (\Error $e) {
+            (new Logger)->log('Failed DB query: ' . $e->getMessage(), 'emergency');
+
+        }
+
     }
 
     public function getList(string $query, array $params = [])
     {
-        $query = $this->db->prepare($query);
-        $query->execute($params);
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+        try{
+            $query = $this->db->prepare($query);
+            $query->execute($params);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Error $e) {
+            (new Logger)->log('Failed DB query: ' . $e->getMessage(), 'emergency');
+        }
+
     }
 
     public function execute(string $query, array $params = [])

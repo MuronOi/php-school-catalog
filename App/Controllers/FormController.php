@@ -3,13 +3,19 @@
 namespace App\Controllers;
 
 use App\Database\Query;
+use App\logger\Logger;
 use App\Views\RedirectView;
-use App\Views\StringView;
 use App\Views\TemplateView;
-use http\Params;
 
 class FormController
 {
+    private $logger;
+
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
+
     public function index($params = [])
     {
 
@@ -29,6 +35,12 @@ class FormController
             "SELECT * FROM forms WHERE id = ?",
             [$params['id']]
         );
+
+        if (empty($form)) {
+            $message = (sprintf('Id not found. id = %d' , $params['id']));
+            (new Logger)->log($message,'warning');
+            die;
+        }
 
         return new TemplateView('form_view', [
             'form' => $form
