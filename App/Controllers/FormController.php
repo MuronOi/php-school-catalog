@@ -22,6 +22,7 @@ class FormController
         $query = new Query;
         $forms = $query->getList("SELECT * FROM forms");
 
+        //$this->logger->log()
         return new TemplateView('form_index', [
             'title' => 'My awesome page',
             'forms' => $forms

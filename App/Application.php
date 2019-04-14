@@ -29,7 +29,7 @@ class Application
         try {
             $route = $this->router->resolve($request);
             $controller = $this->resolveControllerClass($route);
-          //  $this->logger->log('Used controller: ' . $controller);
+
             $action = $this->resolveControllerAction($route, $controller);
             $this->logger->log('Action: ' . $action);
             $result = $this->runControllerAction($controller, $action, $request);
