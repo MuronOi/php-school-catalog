@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\logger\Logger;
+
 class Route implements RouteInterface
 {
     private $class;
@@ -11,6 +13,7 @@ class Route implements RouteInterface
     {
         $this->class = $class;
         $this->action = $action;
+        (new Logger)->log('Requested Class: ' . $class . ' and Action: ' . $action);
     }
 
     public function getClass() : string

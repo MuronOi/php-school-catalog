@@ -17,10 +17,9 @@ class Router implements RouterInterface
 
     public function add(string $method, string $path, string $controller, string $action)
     {
-        $this->logger->log($method . ' ' . $path . ' ' . $controller . ' ' . $action );
-
         $method = strtoupper($method);
         $this->routes[$method][$path] = new Route($controller, $action);
+
         $this->logger->log('Route add - ' . $this->routes[$method][$path]->getClass() .
             ' at path: ' . $path . ' and with method: ' . $method);
     }
@@ -30,7 +29,7 @@ class Router implements RouterInterface
         $method = $request->getMethod();
         $path = $request->getPath();
 
-        $this->logger->log('Requested route: ' . $path);
+        $this->logger->log('Requested route: ' . $path . ' Requested path: ' . $path);
 
         try {
             if (!isset($this->routes[$method][$path])) {
