@@ -4,13 +4,36 @@ namespace App\Http;
 
 use App\logger\Logger;
 
+/**
+ * Class Route
+ * @package App\Http
+ */
 class Route implements RouteInterface
 {
+    /**
+     * @var string
+     */
     private $class;
+    /**
+     * @var string
+     */
     private $path;
+    /**
+     * @var string
+     */
     private $method;
+    /**
+     * @var string
+     */
     private $action;
 
+    /**
+     * Route constructor.
+     * @param string $method
+     * @param string $path
+     * @param string $class
+     * @param string $action
+     */
     public function __construct(string $method, string $path, string $class, string $action)
     {
         $this->class = $class;
@@ -20,17 +43,27 @@ class Route implements RouteInterface
         (new Logger)->log('Requested Class: ' . $class . ' and Action: ' . $action);
     }
 
+    /**
+     * @return string
+     */
     public function getClass() : string
     {
         return $this->class;
     }
 
+    /**
+     * @return string
+     */
     public function getAction() : string
     {
         return $this->action;
     }
 
-    public function isOk(string $fullPath) : bool
+    /**
+     * @param string $fullPath
+     * @return bool
+     */
+    public function checkAction(string $fullPath) : bool
     {
         $fullPathArr = explode('/', $fullPath);
         $patternPath = explode('/', $this->path);
@@ -49,13 +82,16 @@ class Route implements RouteInterface
         return ($j === count($fullPathArr)) ? true : false;
     }
 
+    /**
+     * @param RequestInterface $request
+     * @return array
+     */
     public function resolveParams(RequestInterface $request): array
     {
         $requestArr = explode('/', $request->getPath());
         $pathArr = explode('/', $this->path);
-//        p($requestArr);
-//        p($pathArr);
         $result = [];
+
         for ($i = 0; $i < count($pathArr); $i++){
             if (preg_match('/^\{(.+)\}$/', $pathArr[$i]) === 1){
                 $bindName = trim($pathArr[$i], '{}');

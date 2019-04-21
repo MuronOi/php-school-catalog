@@ -6,6 +6,10 @@ use App\Config;
 use App\logger\Logger;
 use PDO;
 
+/**
+ * Class Query
+ * @package App\Database
+ */
 class Query
 {
     /**
@@ -13,6 +17,10 @@ class Query
      */
     protected $db;
 
+    /**
+     * Query constructor.
+     * @param Connection|null $connection
+     */
     public function __construct(Connection $connection = null)
     {
         // FIXME
@@ -23,6 +31,11 @@ class Query
         $this->db = $connection->getConnection();
     }
 
+    /**
+     * @param string $query
+     * @param array $params
+     * @return mixed
+     */
     public function getRow(string $query, array $params = [])
     {
         try{
@@ -36,6 +49,11 @@ class Query
 
     }
 
+    /**
+     * @param string $query
+     * @param array $params
+     * @return array
+     */
     public function getList(string $query, array $params = [])
     {
         try{
@@ -48,12 +66,19 @@ class Query
 
     }
 
+    /**
+     * @param string $query
+     * @param array $params
+     */
     public function execute(string $query, array $params = [])
     {
         $query = $this->db->prepare($query);
         $query->execute($params);
     }
 
+    /**
+     * @return string
+     */
     public function getLastInsertId()
     {
         return $this->db->lastInsertId();

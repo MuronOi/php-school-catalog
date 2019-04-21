@@ -9,6 +9,10 @@ use App\Http\RouterInterface;
 use App\logger\Logger;
 use App\Views\ViewInterface;
 
+/**
+ * Class Application
+ * @package App
+ */
 class Application
 {
     /**
@@ -16,14 +20,25 @@ class Application
      */
     protected $router;
 
+    /**
+     * @var Logger
+     */
     private $logger;
 
+    /**
+     * Application constructor.
+     * @param RouterInterface $router
+     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
         $this->logger = new Logger();
     }
 
+    /**
+     * @param RequestInterface $request
+     * @throws \Exception
+     */
     public function handleRequest(RequestInterface $request)
     {
         try {
@@ -44,6 +59,10 @@ class Application
         }
     }
 
+    /**
+     * @param RouteInterface $route
+     * @return mixed
+     */
     protected function resolveControllerClass(RouteInterface $route)
     {
         $class = $route->getClass();
@@ -59,6 +78,12 @@ class Application
         return new $class;
     }
 
+    /**
+     * @param RouteInterface $route
+     * @param $controller
+     * @return string
+     * @throws \Exception
+     */
     protected function resolveControllerAction(RouteInterface $route, $controller)
     {
         $action = $route->getAction();
@@ -72,6 +97,13 @@ class Application
         return $action;
     }
 
+    /**
+     * @param $controller
+     * @param $action
+     * @param RequestInterface $request
+     * @param $bindings
+     * @return mixed
+     */
     protected function runControllerAction($controller, $action, RequestInterface $request, $bindings)
     {
         $params = $request->getQueryParams();
@@ -80,6 +112,9 @@ class Application
         return $controller->$action($params, $postData, $putData, $bindings);
     }
 
+    /**
+     * @param $result
+     */
     protected function render($result)
     {
         try {

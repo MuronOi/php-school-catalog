@@ -2,32 +2,47 @@
 
 namespace App\Http;
 
+/**
+ * Class Request
+ * @package App\Http
+ */
 class Request implements RequestInterface
 {
+    /**
+     * @return mixed
+     */
     public function getMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
     }
-
+    /**
+     * @return mixed
+     */
     public function getPath()
     {
         return explode('?', $_SERVER['REQUEST_URI'])[0];
     }
-
+    /**
+     * @return mixed
+     */
     public function getQueryParams()
     {
         return $_GET;
     }
-
+    /**
+     * @return mixed
+     */
     public function getPostData()
     {
         return $_POST;
     }
-
+    /**
+     * @return array
+     */
     public function getPutData()
     {
         $_PUT = [];
-        
+
         if (strpos($_SERVER['CONTENT_TYPE'], 'multipart') !== false) {
             $_PUT = $this->getPutDataFormDataType() ;
         } elseif (strpos($_SERVER['CONTENT_TYPE'], 'application') !== false) {
@@ -35,7 +50,9 @@ class Request implements RequestInterface
         }
         return $_PUT;
     }
-
+    /**
+     * @return array
+     */
     private function getPutDataFormDataType (): array
     {
         $raw_data = file_get_contents('php://input');
@@ -45,8 +62,9 @@ class Request implements RequestInterface
         $data = [];
 
         foreach ($parts as $part) {
-            if ($part == "--\r\n") break;
-
+            if ($part == "--\r\n") {
+                break;
+            }
             // Separate content from headers
             $part = ltrim($part, "\r\n");
             list($raw_headers, $body) = explode("\r\n\r\n", $part, 2);
@@ -57,36 +75,19 @@ class Request implements RequestInterface
                 list($name, $value) = explode(':', $header);
                 $headers[strtolower($name)] = ltrim($value, ' ');
             }
-//            p($headers, ' heders');
             // Parse the Content-Disposition to get the field name, etc.
             if (isset($headers['content-disposition'])) {
-                $filename = null;
-                preg_match(
-                    '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
-                    $headers['content-disposition'],
-                    $matches
-                );
+                preg_match('/^(.+); *name="([^"]+)"/', $headers['content-disposition'],$matches);
                 list(, $type, $name) = $matches;
-                isset($matches[4]) and $filename = $matches[4];
-
-                // handle your fields here
-                switch ($name) {
-                    // this is a file upload
-                    case 'userfile':
-                        file_put_contents($filename, $body);
-                        break;
-
-                    // default for all other files is to populate $data
-                    default:
-                        $data[$name] = substr($body, 0, strlen($body) - 2);
-                        break;
-                }
+                $data[$name] = substr($body, 0, strlen($body) - 2);
             }
         }
         return $data;
     }
-
-    protected function getPutDataXWwwFormUrlencoded(): array
+    /**
+     * @return array
+     */
+    private function getPutDataXWwwFormUrlencoded(): array
     {
         $putdata = file_get_contents('php://input');
         $exploded = explode('&', $putdata);

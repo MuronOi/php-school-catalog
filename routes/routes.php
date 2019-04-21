@@ -4,7 +4,6 @@ use App\Controllers\Api\FormControllerApi;
 use App\Controllers\FormController;
 use App\Controllers\IndexController;
 use App\Http\Router;
-use App\Http\RouterApi;
 
 $router = new Router();
 
@@ -15,9 +14,9 @@ $router->add('post', '/forms/create', FormController::class, 'create');
 $router->add('get', '/forms/update', FormController::class, 'update');
 $router->add('post', '/forms/update', FormController::class, 'updatePost');
 $router->add('get', '/forms/delete', FormController::class, 'delete');
-
-//$router = new RouterApi();
-
+/**
+ * REST API Routers
+ */
 $router->add('get', '/api/v1/forms/', FormControllerApi::class, 'index');
 $router->add('get', '/api/v1/forms/{formId}', FormControllerApi::class, 'view');
 $router->add('post', '/api/v1/forms/', FormControllerApi::class, 'create');
