@@ -48,7 +48,7 @@ class FormController
         ]);
     }
 
-    public function create($params, $post)
+    public function create($params, $post, $bindings)
     {
         $query = new Query();
         // $query->execute(

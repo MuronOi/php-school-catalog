@@ -53,8 +53,8 @@ class Route implements RouteInterface
     {
         $requestArr = explode('/', $request->getPath());
         $pathArr = explode('/', $this->path);
-        p($requestArr);
-        p($pathArr);
+//        p($requestArr);
+//        p($pathArr);
         $result = [];
         for ($i = 0; $i < count($pathArr); $i++){
             if (preg_match('/^\{(.+)\}$/', $pathArr[$i]) === 1){

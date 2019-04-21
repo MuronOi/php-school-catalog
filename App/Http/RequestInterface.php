@@ -11,4 +11,6 @@ interface RequestInterface
     public function getQueryParams();
 
     public function getPostData();
+
+    public function getPutData();
 }

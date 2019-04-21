@@ -76,7 +76,8 @@ class Application
     {
         $params = $request->getQueryParams();
         $postData = $request->getPostData();
-        return $controller->$action($params, $postData, $bindings);
+        $putData = $request->getPutData();
+        return $controller->$action($params, $postData, $putData, $bindings);
     }
 
     protected function render($result)

@@ -27,10 +27,10 @@ class Router implements RouterInterface
 
     public function resolve(RequestInterface $request) : RouteInterface
     {
-        p($this->routes);
+//        p($this->routes);
         $method = $request->getMethod();
         $path = $request->getPath();
-        p($path);
+//        p($path);
 
         /** @var RouteInterface $route */
         foreach ($this->routes[$method] as $route){

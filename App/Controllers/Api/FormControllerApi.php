@@ -16,10 +16,8 @@ class FormControllerApi
         $query = new Query;
         $forms = $query->getList("SELECT * FROM forms");
 
-        //header('Status code: 201');
         http_response_code(201);
-
-        return new JsonView( json_encode($forms));
+        return new JsonView(json_encode($forms));
     }
 
 
@@ -39,41 +37,34 @@ class FormControllerApi
 //        }
         http_response_code(201);
 
-        return new JsonView( json_encode($form));
+        return new JsonView(json_encode($form));
     }
 
     public function create($params, $post)
     {
         $query = new Query();
-        // $query->execute(
-        //     "INSERT INTO forms (title, content) VALUES (?, ?)",
-        //     [$post['form']['title'], $post['form']['content']]
-        // );
-
         $query->execute(
-            "INSERT INTO forms (title, content) VALUES (:title, :content)",
-            $post['form']
+            "INSERT INTO forms (title, content) VALUES (?, ?)",
+            [$post['title'], $post['content']]
         );
 
         $id = $query->getLastInsertId();
 
-        return new RedirectView('/forms/view?id=' . $id);
+        return $this->view([], [], ['formId' => $id]);
     }
 
-    public function delete($params)
+    public function update($get, $put, $params, $bindings)
     {
-        (new Query)->execute("DELETE FROM forms WHERE id = ?", [$params['id']]);
-        return new RedirectView('/forms');
+        p($params);
+        p($bindings);
+        (new Query)->execute("UPDATE forms SET title = ?, content = ? WHERE id = ?",
+            [$params['title'], $params['content'], $bindings['formId']]);
+        return 'opa';
     }
-
-    public function update ($params)
+    public function delete($get, $params, $bindings)
     {
-        return new TemplateView( 'form_update', ['form' => $params]);
-    }
+        (new Query)->execute("DELETE FROM forms WHERE id = ?", [$bindings['formId']]);
 
-    public function updatePost($get, $params)
-    {
-        (new Query)->execute("UPDATE forms SET title = :title, content = :content WHERE id = :id", $params['form']);
-        return new RedirectView('/forms/view?id=' . $params['form']['id']);
+        return 'ok';
     }
 }

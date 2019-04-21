@@ -4,23 +4,44 @@
 namespace App\Views;
 
 
+use App\logger\Logger;
+
 class JsonView implements ViewInterface
 {
-    private $params;
+    protected $template;
+    protected $data;
+    private $logger;
 
-    /**
-     * JsonView constructor.
-     * @param $params
-     */
-    public function __construct($params)
+    public function __construct($data)
     {
-        $this->params = $params;
+//        $this->template = $template;
+        $this->data = $data;
+        $this->logger = new Logger();
     }
-
 
     public function render()
     {
-        var_dump(json_decode($this->params));
 
+
+        $this->data = json_decode($this->data, true);
+        p($this->data);
+//        extract($this->data);
+//
+//        try {
+//            $path = __DIR__ . '/../../views/' . $this->template . '.php';
+//            if (!file_exists($path)) {
+//                throw new \Exception('View file does not exists');
+//            }
+//        } catch (\Exception $e) {
+//            $this->logger->log($e->getMessage() . 'File: ' . $path, 'error');
+//        }
+//
+//
+//        ob_start();
+//        require __DIR__ . '/../../views/' . $this->template . '.php';
+//        $content = ob_get_clean();
+//
+//        require __DIR__ . '/../../views/layout.php';
     }
 }
+
