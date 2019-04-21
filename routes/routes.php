@@ -1,8 +1,10 @@
 <?php
 
+use App\Controllers\Api\FormControllerApi;
 use App\Controllers\FormController;
 use App\Controllers\IndexController;
 use App\Http\Router;
+use App\Http\RouterApi;
 
 $router = new Router();
 
@@ -14,5 +16,12 @@ $router->add('get', '/forms/update', FormController::class, 'update');
 $router->add('post', '/forms/update', FormController::class, 'updatePost');
 $router->add('get', '/forms/delete', FormController::class, 'delete');
 
+//$router = new RouterApi();
+
+$router->add('get', '/api/v1/forms/', FormControllerApi::class, 'index');
+$router->add('get', '/api/v1/forms/{formId}', FormControllerApi::class, 'view');
+$router->add('post', '/api/v1/forms/', FormControllerApi::class, 'create');
+$router->add('put', '/api/v1/forms/{formId}', FormControllerApi::class, 'update');
+$router->add('delete', '/api/v1/forms/{formId}', FormControllerApi::class, 'delete');
 
 return $router;

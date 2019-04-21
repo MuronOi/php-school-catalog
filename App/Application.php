@@ -28,11 +28,15 @@ class Application
     {
         try {
             $route = $this->router->resolve($request);
+
             $controller = $this->resolveControllerClass($route);
 
             $action = $this->resolveControllerAction($route, $controller);
+            $bindngs = $route->resolveParams($request);
+
             $this->logger->log('Action: ' . $action);
-            $result = $this->runControllerAction($controller, $action, $request);
+
+            $result = $this->runControllerAction($controller, $action, $request, $bindngs);
             $this->render($result);
         } catch (RouteNotFoundException $exception) {
             //TODO make 404 redirect;
@@ -58,18 +62,21 @@ class Application
     protected function resolveControllerAction(RouteInterface $route, $controller)
     {
         $action = $route->getAction();
+      //  $bindings = $route->resolveParams();
 
         if (!method_exists($controller, $action)) {
             throw new \Exception('Action does not exists');
         }
+
+
         return $action;
     }
 
-    protected function runControllerAction($controller, $action, RequestInterface $request)
+    protected function runControllerAction($controller, $action, RequestInterface $request, $bindings)
     {
         $params = $request->getQueryParams();
         $postData = $request->getPostData();
-        return $controller->$action($params, $postData);
+        return $controller->$action($params, $postData, $bindings);
     }
 
     protected function render($result)
