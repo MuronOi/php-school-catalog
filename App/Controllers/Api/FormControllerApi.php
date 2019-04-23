@@ -19,8 +19,7 @@ class FormControllerApi
         $query = new Query;
         $forms = $query->getList("SELECT * FROM forms");
 
-        http_response_code(200);
-        return new JsonView(json_encode($forms));
+        return new JsonView($forms);
     }
 
     public function view($get, $postData, $putData, $bindings)
@@ -38,8 +37,7 @@ class FormControllerApi
             die;
         }
 
-        http_response_code(200);
-        return new JsonView(json_encode($form));
+        return new JsonView($form);
     }
 
     public function create($params, $post)
@@ -51,21 +49,26 @@ class FormControllerApi
         );
 
         $id = $query->getLastInsertId();
-        http_response_code(201);
-        return 'crated';
+
+        $form = $query->getRow("SELECT * FROM forms WHERE id = ?", [$id]);
+
+        return new JsonView($form, ['Form created'], 201 );
     }
 
     public function update($get, $put, $params, $bindings)
     {
-        (new Query)->execute("UPDATE forms SET title = ?, content = ? WHERE id = ?",
+        $query = new Query();
+        $query->execute("UPDATE forms SET title = ?, content = ? WHERE id = ?",
             [$params['title'], $params['content'], $bindings['formId']]);
-        return 'updated';
+
+        $form = $query->getRow("SELECT * FROM forms WHERE id = ?", [$bindings['formId']]);
+        return new JsonView($form);
     }
 
     public function delete($get, $put, $params, $bindings)
     {
         (new Query)->execute("DELETE FROM forms WHERE id = ?", [$bindings['formId']]);
 
-        return 'deleted';
+        return new JsonView('', [], 204);
     }
 }

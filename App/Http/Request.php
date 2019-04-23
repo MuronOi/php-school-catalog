@@ -34,7 +34,13 @@ class Request implements RequestInterface
      */
     public function getPostData()
     {
-        return $_POST;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $data = $this->getPutData();
+        } else {
+            $data = $_POST;
+        }
+        return $data;
     }
     /**
      * @return array
