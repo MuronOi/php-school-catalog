@@ -32,7 +32,7 @@ class Request implements RequestInterface
     /**
      * @return mixed
      */
-    public function getPostData()
+    public function getRequestBodyData()
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'PUT') {

@@ -42,7 +42,6 @@ class Route implements RouteInterface
         $this->action = $action;
         (new Logger)->log('Requested Class: ' . $class . ' and Action: ' . $action);
     }
-
     /**
      * @return string
      */
@@ -50,7 +49,6 @@ class Route implements RouteInterface
     {
         return $this->class;
     }
-
     /**
      * @return string
      */
@@ -58,7 +56,6 @@ class Route implements RouteInterface
     {
         return $this->action;
     }
-
     /**
      * @param string $fullPath
      * @return bool
@@ -81,7 +78,6 @@ class Route implements RouteInterface
         }
         return ($j === count($fullPathArr)) ? true : false;
     }
-
     /**
      * @param RequestInterface $request
      * @return array

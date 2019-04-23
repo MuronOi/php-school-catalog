@@ -14,6 +14,10 @@ use App\Views\TemplateView;
  */
 class FormControllerApi
 {
+    /**
+     * @param array $params
+     * @return JsonView
+     */
     public function index($params = [])
     {
         $query = new Query;
@@ -21,8 +25,13 @@ class FormControllerApi
 
         return new JsonView($forms);
     }
-
-    public function view($get, $postData, $putData, $bindings)
+    /**
+     * @param $get
+     * @param $putData
+     * @param $bindings
+     * @return JsonView
+     */
+    public function view($get, $putData, $bindings)
     {
         $query = new Query();
         $form = $query->getRow(
@@ -39,8 +48,12 @@ class FormControllerApi
 
         return new JsonView($form);
     }
-
-    public function create($params, $post)
+    /**
+     * @param $params
+     * @param $post
+     * @return JsonView
+     */
+    public function create($params, $post, $bindings)
     {
         $query = new Query();
         $query->execute(
@@ -54,8 +67,13 @@ class FormControllerApi
 
         return new JsonView($form, ['Form created'], 201 );
     }
-
-    public function update($get, $put, $params, $bindings)
+    /**
+     * @param $get
+     * @param $params
+     * @param $bindings
+     * @return JsonView
+     */
+    public function update($get, $params, $bindings)
     {
         $query = new Query();
         $query->execute("UPDATE forms SET title = ?, content = ? WHERE id = ?",
@@ -64,11 +82,17 @@ class FormControllerApi
         $form = $query->getRow("SELECT * FROM forms WHERE id = ?", [$bindings['formId']]);
         return new JsonView($form);
     }
-
-    public function delete($get, $put, $params, $bindings)
+    /**
+     * @param $get
+     * @param $params
+     * @param $bindings
+     * @return JsonView
+     */
+    public function delete($get, $params, $bindings)
     {
         (new Query)->execute("DELETE FROM forms WHERE id = ?", [$bindings['formId']]);
+        $query = new Query;
 
-        return new JsonView('', [], 204);
+        return new JsonView([], ["Form {$bindings['formId']} deleted"], 204);
     }
 }

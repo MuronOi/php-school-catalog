@@ -26,7 +26,7 @@ interface RequestInterface
     /**
      * @return mixed
      */
-    public function getPostData();
+    public function getRequestBodyData();
 
     /**
      * @return mixed
